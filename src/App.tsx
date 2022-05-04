@@ -22,7 +22,6 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />}/>
             <Route path="/availability/:id" element={ <Availability />}/>
-            {/* ??? customize the results page so it matches meeting id??? */}
             <Route path="/results/:id" element={ <DisplayAvailResults />} />
           </Routes>
         </main>

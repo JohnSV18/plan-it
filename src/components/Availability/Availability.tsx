@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import Modal from "react-modal";
 import axios from "axios";
-import {  useNavigate, useParams  } from "react-router-dom";
+import {  useNavigate, useParams, useLocation, Link} from "react-router-dom";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { DayPilot, DayPilotCalendar } from "@daypilot/daypilot-lite-react";
@@ -33,11 +33,12 @@ const Availability = (props: any) => {
 
   //Params passsed throught naviagtion
   // on page load, get meeting info from data
-  // const availabilityNavigation: any = useLocation();
-  // const meetingNumID = availabilityNavigation.state['meetingNumID'];
-  // const eventName = availabilityNavigation.state['eventName'];
-  // const eventDate = availabilityNavigation.state['date'];
-  // const coordTimeZone = availabilityNavigation.state['coordTimeZone'];
+  const availabilityNavigation: any = useLocation();
+  const meetingNumIdNav = availabilityNavigation.state['meetingNumID'];
+  const eventNameNav = availabilityNavigation.state['eventName'];
+  const eventDateNav = availabilityNavigation.state['date'];
+  const coordTimeZoneNav = availabilityNavigation.state['coordTimeZone'];
+  const emailsNav = availabilityNavigation.state['emails'];
   // const attendees = availabilityNavigation.state['attendees'];
 
 
@@ -82,23 +83,21 @@ const Availability = (props: any) => {
     // async function for axios call
     const getData = async() => {
       try{
-        const response = await axios.get(`http://localhost:4000/dates/results/${meetingNumID}`);
-
-        if(response !== undefined){
+        {
 
           //deconstruct data from response
-          const { eventName, date, timezone, emails } = response.data[0];
+          // const { eventName, date, timezone, emails } = response.data[0];
 
           // save data in state
-          setEventName(eventName);
-          setSelectedDate(date);
-          setCoordTimeZone(timezone);
+          setEventName(eventNameNav);
+          setSelectedDate(eventDateNav);
+          setCoordTimeZone(coordTimeZoneNav);
 
           // get month as string from event date
-          const month = new Date(date).toLocaleString('default', {month: "long"});
+          const month = new Date(eventDateNav).toLocaleString('default', {month: "long"});
           setCalendarMonth(month);
           //get year
-          const year = new Date(date).getFullYear();
+          const year = new Date(eventDateNav).getFullYear();
           setCalendarYear(year);
 
           // get current timeZone
@@ -114,13 +113,52 @@ const Availability = (props: any) => {
           // determine number of meeting attendees
           // includes coordinator
           let arrayOfNumOfUsers = [1];
-          if(emails.length > 0){
-            for (let i= 0; i < emails.length; i++){
+          if(emailsNav.length > 0){
+            for (let i= 0; i < emailsNav.length; i++){
               arrayOfNumOfUsers.push(i + 2)
             }
             setNumOfAttendees(arrayOfNumOfUsers);
           }
         }
+        // const response = await axios.get(`http://localhost:4000/dates/results/${meetingNumID}`);
+
+        // if(response !== undefined){
+
+        //   //deconstruct data from response
+        //   const { eventName, date, timezone, emails } = response.data[0];
+
+        //   // save data in state
+        //   setEventName(eventName);
+        //   setSelectedDate(date);
+        //   setCoordTimeZone(timezone);
+
+        //   // get month as string from event date
+        //   const month = new Date(date).toLocaleString('default', {month: "long"});
+        //   setCalendarMonth(month);
+        //   //get year
+        //   const year = new Date(date).getFullYear();
+        //   setCalendarYear(year);
+
+        //   // get current timeZone
+        //   const eventTimeZone = new Date().toLocaleTimeString(undefined, {timeZoneName: "short"}).split(" ")[2];
+        //   setTimezone(eventTimeZone);
+
+        //   // get timezoneoffest
+        //   // const timeZoneOffset = -180;
+        //   const timeZoneOffset = new Date().getTimezoneOffset();
+        //   console.log("timezoneOFfset=",timeZoneOffset);
+        //   setTimeZoneOffset(timeZoneOffset);
+
+        //   // determine number of meeting attendees
+        //   // includes coordinator
+          let arrayOfNumOfUsers = [1];
+          if(emailsNav.length > 0){
+            for (let i= 0; i < emailsNav.length; i++){
+              arrayOfNumOfUsers.push(i + 2)
+            }
+            setNumOfAttendees(arrayOfNumOfUsers);
+          }
+        // }
       }
       catch(error){
         if(error instanceof Error){
@@ -222,18 +260,20 @@ const Availability = (props: any) => {
       console.log(availBlock.start, availBlock.end)
     })
     console.log(data)
+    
+    
 
-
+    // navigate('/testingresults')
 
     // axios POST
-    axios.post(`http://localhost:4000/dates/availability/${meetingNumID}`, data)
-    .then(() => {
-      navigate(`/results/${meetingNumID}`, { 
-        state: {
-          meetingNumID: meetingNumID
-        }
-       });
-    })
+    // axios.post(`http://localhost:4000/dates/availability/${meetingNumID}`, data)
+    // .then(() => {
+    //   navigate(`/results/${meetingNumID}`, { 
+    //     state: {
+    //       meetingNumID: meetingNumID
+    //     }
+    //    });
+    // })
 
     //reset form fields
     reset();
@@ -294,9 +334,12 @@ const Availability = (props: any) => {
                 type="submit"
                 className="availabilitySubmitBtn"
                 onClick={() => {
-                  setValue("availability", eventArray ?eventArray :[])
-                  setValue("timezone", timezone ?timezone :"")
-                }}> 
+
+                  // setValue("availability", eventArray ?eventArray :[])
+                  // setValue("timezone", timezone ?timezone :"")
+                  // navigate('https://www.google.com')
+                  window.location.href = "https://www.figma.com/proto/HY8PgTqQQmW3wvjBqosS1c/Plan-it?node-id=378%3A3502&scaling=min-zoom&page-id=378%3A3294"
+                }}>
                 Add Availability
               </button>
            

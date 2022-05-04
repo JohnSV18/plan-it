@@ -84,6 +84,8 @@ const Home:React.FC = () => {
   const [ successModalIsOpen, setSuccessModalIsOpen ] = useState<boolean>(false);
   // the meeting number
   const [ meetingNumID, setMeetingNumID ] = useState<string>();
+
+  const [ eventName, setEventName ] = useState<string>();
   
 
 
@@ -144,25 +146,15 @@ const Home:React.FC = () => {
   // close success module and navigate to availability page
   const closeSuccessModal = () => {
     setSuccessModalIsOpen(false);
-    
-    // get meeting id from state
-    // use event id as params for navigate/:id
-      if(meetingNumID){
-        //do axios get call here to get meeting info also with the meeting number
-        axios.get(`http://localhost:4000/dates/availability/${meetingNumID}`)
-        .then(data => {
-          console.log(data['data'][0]['date'])
-        //  Passing the meeting number through the URL to the Availability page
-          navigate(`/availability/${meetingNumID}`, { 
-           state: {
-             meetingNumID: meetingNumID,
-             eventName: data['data'][0]['eventName'],
-             date: data['data'][0]['date'],
-             coordTimeZone: timezone,
-             attendees: numOfAttendees          }
-          });
-        })
-      }
+    navigate(`/availability/${meetingNumID}`, { 
+      state: {
+        meetingNumID: meetingNumID,
+        eventName: eventName,
+        date: chosenDay,
+        coordTimeZone: timezone,
+        emails: inputtedEmails,
+        attendees: numOfAttendees          }
+     });
   }
   // function that gets ranodm number for meeting
   // Might change this to be more on the backend
@@ -184,18 +176,20 @@ const Home:React.FC = () => {
       setMeetingNumID(rndNumString);
       let firstEmail = data.emails[0];
       console.log(firstEmail);
+      setEventName(data.eventName);
      //  mailer.sendMail(firstEmail)
 
       // axios POST request that adds the meeting to the database
-      axios.post("http://localhost:4000/dates/add", data)
-      .then(res => {
-        // console.log(data)
-        console.log('Successfully added meeting to database')
-      })
-      .catch(error => console.log(error));
+      // axios.post("http://localhost:4000/dates/add", data)
+      // .then(res => {
+      //   // console.log(data)
+      //   console.log('Successfully added meeting to database')
+      // })
+      // .catch(error => console.log(error));
       // reset form fields
+      setChosenDay(data.date);
       reset();
-      setChosenDay(new DayPilot.Date().value);
+      // setChosenDay(new DayPilot.Date().value);
       setNoDate(false);
       setSchedModalIsOpen(false); // closes scheduling modal
       setSuccessModalIsOpen(true); // opens success modal
@@ -384,6 +378,8 @@ const Home:React.FC = () => {
                   if(inputtedEmails.length > 0 && chosenDay){
                     setNoEmails(false);
                     setNoDate(false);
+                    // setEventName()
+    
                     setValue("date", chosenDay ?chosenDay :null);
                     setValue("timezone", timezone ?timezone :"");
                     setValue("emails", inputtedEmails ?inputtedEmails :[])
