@@ -335,10 +335,8 @@ const Availability = (props: any) => {
                 className="availabilitySubmitBtn"
                 onClick={() => {
 
-                  // setValue("availability", eventArray ?eventArray :[])
-                  // setValue("timezone", timezone ?timezone :"")
-                  // navigate('https://www.google.com')
-                  window.location.href = "https://www.figma.com/proto/HY8PgTqQQmW3wvjBqosS1c/Plan-it?node-id=378%3A3502&scaling=min-zoom&page-id=378%3A3294"
+                 
+                  window.location.href = "https://www.figma.com/proto/HY8PgTqQQmW3wvjBqosS1c/Plan-it?node-id=378%3A4386&scaling=scale-down&page-id=378%3A3294&starting-point-node-id=378%3A4386"
                 }}>
                 Add Availability
               </button>
